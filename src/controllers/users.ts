@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/user';
 import BadRequestError from '../errors/bad-request-error';
 import ConflictError from '../errors/conflict-error';
-import { JWT_SECRET_KEY } from '../config';
+import { JWT_ACCESS_SECRET } from "../config";
 
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
   const { password, ...restUserData } = req.body;
@@ -33,7 +33,7 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, JWT_SECRET_KEY);
+      const token = jwt.sign({ _id: user._id }, JWT_ACCESS_SECRET);
 
       return res
         .cookie('jwt', token, {
